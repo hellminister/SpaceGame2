@@ -16,6 +16,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.StageStyle;
 import spacegame2.gamedata.gamestate.GameState;
+import spacegame2.gamedata.gamestate.GameWorld;
 import spacegame2.gamedata.objectstructure.PlayerStructure;
 import spacegame2.gamedata.objectstructure.Triple;
 import spacegame2.gamedata.playerinfo.Player;
@@ -179,9 +180,10 @@ class MiddlePane {
             }
         }
 
-
+        GameState newGame = new GameState();
+        GameWorld.accessGameWorld().setPlayerState(newGame);
         Player newPlayerInfo = new Player(attribs, PlayerStructure.getSaveFileName());
-        GameState newGame = new GameState(newPlayerInfo);
+        newGame.setPlayer(newPlayerInfo);
         playerList.createPlayer(newGame);
     }
 

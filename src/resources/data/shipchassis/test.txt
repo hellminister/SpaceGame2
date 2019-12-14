@@ -1,0 +1,8 @@
+name Test
+description for testing purpose
+sprite ship/rocket_straight_up_no_fire.png
+mass 10
+thrusting 100
+longueur 100
+largeur 50
+turnThrusting 50

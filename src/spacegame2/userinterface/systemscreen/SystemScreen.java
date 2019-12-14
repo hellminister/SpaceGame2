@@ -4,8 +4,10 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.DoublePropertyBase;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -13,6 +15,8 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import spacegame2.SpaceGame;
+import spacegame2.gamedata.gamestate.GameWorld;
+import spacegame2.userinterface.ManualControl;
 
 public class SystemScreen extends Scene {
 
@@ -73,13 +77,75 @@ public class SystemScreen extends Scene {
         finishBindings(circle);
 
 
+
+        setOnKeyActions();
+
+    }
+
+    private void setOnKeyActions() {
+        setOnKeyPressed(this::onKeyPressedActions);
+
+        setOnKeyReleased(this::onKeyReleasedActions);
+    }
+
+    private void onKeyReleasedActions(KeyEvent e) {
+        if (sceneAnimation.isStarted()) {
+            ManualControl.manualControl.gotKeyReleasedAction(e);
+     /*       switch (e.getCode()) {
+                case UP:
+                    ship.stopAccelerate();
+                    break;
+                default:
+                    break;
+            }
+        }
+        switch (e.getCode()) {
+            case X:
+                mainTheater.changeSceneToStartScreen(this);
+                sceneAnimation.stop();
+                break;
+            case P:
+                sceneAnimation.toggle();
+                break;
+            default:
+                break;*/
+        }
+    }
+
+    private void onKeyPressedActions(KeyEvent e) {
+        if (sceneAnimation.isStarted()) {
+            ManualControl.manualControl.gotKeyPressedAction(e);
+       /*     switch (e.getCode()) {
+                case RIGHT:
+                    ship.turnRight();
+                    break;
+                case LEFT:
+                    ship.turnLeft();
+                    break;
+                case UP:
+                    ship.accelerate();
+                    break;
+                case DOWN:
+                    ship.reverseDirection();
+                    break;
+                default:
+                    break;
+            }*/
+        }
+    }
+
+    public void placePlayerShip(){
+        Node shipSprite = GameWorld.accessGameWorld().getState().getPlayerState().getFlagShip().getSprite();
+        fullSystemArea.getChildren().add(shipSprite);
+
+        finishBindings(shipSprite);
     }
 
     /**
      * This method binds the scroll pane so that the players main ship is always centered
      * @param circle
      */
-    public void finishBindings(Shape circle) {
+    public void finishBindings(Node circle) {
         DoublePropertyBase halfY = new SimpleDoubleProperty();
 
         halfY.bind(fullSystemArea.heightProperty().subtract(viewport.heightProperty()));
@@ -99,4 +165,7 @@ public class SystemScreen extends Scene {
     }
 
 
+    public void start() {
+        sceneAnimation.start();
+    }
 }

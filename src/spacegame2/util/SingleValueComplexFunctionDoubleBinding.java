@@ -1,15 +1,15 @@
 package spacegame2.util;
 
 import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.DoubleProperty;
+import javafx.beans.value.ObservableDoubleValue;
 
 /**
  * Created by user on 2016-12-23.
  */
 public class SingleValueComplexFunctionDoubleBinding extends DoubleBinding {
-    private ComputeFunction function;
+    protected ComputeFunction function;
 
-    public SingleValueComplexFunctionDoubleBinding(DoubleProperty value, ComputeFunction funct) {
+    public SingleValueComplexFunctionDoubleBinding(ObservableDoubleValue value, ComputeFunction funct) {
         super.bind(value);
         function = funct;
     }

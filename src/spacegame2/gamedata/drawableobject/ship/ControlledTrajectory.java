@@ -4,9 +4,12 @@ import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ObservableDoubleValue;
 import spacegame2.gamedata.drawableobject.Trajectory;
 import spacegame2.util.GameTimeActivatedIncrementableDoubleBinding;
 import spacegame2.util.SingleValueComplexFunctionDoubleBinding;
+
+import static spacegame2.gamedata.drawableobject.ship.TurnDirection.STOP;
 
 public class ControlledTrajectory implements Trajectory {
     private DoubleProperty posXProperty;
@@ -17,19 +20,31 @@ public class ControlledTrajectory implements Trajectory {
     private DoubleBinding speedX;
     private DoubleBinding speedY;
 
-    private boolean accelerating;
+    private DoubleBinding turnSpeed;
 
-    private final DoubleProperty angle;     // the angle in radians
+    private boolean accelerating;
+    private TurnDirection angularAccelerating;  // 1 for turning right, 0 for not turning, -1 for turning left
+
+    private final DoubleBinding angle;     // the angle in radians
     private final DoubleBinding angleCos;
     private final DoubleBinding angleSin;
 
-    private DoubleProperty accThruster;
-    private DoubleProperty turnSpeed;
+    private final DoubleProperty accThruster;
+    private final DoubleProperty turnAcc;
 
+
+    // Will need to rearrage this to be sure it wont go over a certain speed, angular or linear
     public ControlledTrajectory() {
-        accelerating = false;
+        accThruster = new SimpleDoubleProperty();
 
-        angle = new SimpleDoubleProperty();
+        turnAcc = new SimpleDoubleProperty();
+
+        accelerating = false;
+        angularAccelerating = STOP;
+
+        turnSpeed = new GameTimeActivatedIncrementableDoubleBinding(0.0, () -> turnAcc.get() * angularAccelerating.getSign());
+
+        angle = new GameTimeActivatedIncrementableDoubleBinding(0.0, () -> (turnSpeed.get()));
 
         angleCos = new SingleValueComplexFunctionDoubleBinding(angle, () -> Math.cos(angle.get()));
 
@@ -37,6 +52,7 @@ public class ControlledTrajectory implements Trajectory {
 
         speedX = new GameTimeActivatedIncrementableDoubleBinding(0.0, () ->  accelerating ? (accThruster.get() * angleCos.get() * -1) : 0);
         speedY = new GameTimeActivatedIncrementableDoubleBinding(0.0, () ->  accelerating ? (accThruster.get() * angleSin.get() * -1) : 0);
+
 
         posX = new GameTimeActivatedIncrementableDoubleBinding(0.0, speedX::get);
 
@@ -46,6 +62,14 @@ public class ControlledTrajectory implements Trajectory {
         posXProperty.bind(posX);
         posYProperty = new SimpleDoubleProperty();
         posYProperty.bind(posY);
+    }
+
+    public void bindAccThruster(ObservableDoubleValue accThrust){
+        accThruster.bind(accThrust);
+    }
+
+    public void bindTurnAcc(ObservableDoubleValue turnAc){
+        turnAcc.bind(turnAc);
     }
 
     @Override
@@ -63,13 +87,7 @@ public class ControlledTrajectory implements Trajectory {
         ((GameTimeActivatedIncrementableDoubleBinding)posY).set(y);
     }
 
-    public void turnRight(){
-        angle.add(turnSpeed);
-    }
-
-    public void turnLeft(){
-        angle.subtract(turnSpeed);
-    }
+    public void turn(TurnDirection angularAccDirection) { angularAccelerating = angularAccDirection; }
 
     public void accelerate(boolean acc){
         accelerating = acc;

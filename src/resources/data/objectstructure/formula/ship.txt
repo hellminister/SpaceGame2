@@ -1,0 +1,2 @@
+accThruster = thrusting / mass
+turnAcc = ( ( longueur ^ 2 + largeur ^ 2 ) / 12 ) * turnThrusting / mass

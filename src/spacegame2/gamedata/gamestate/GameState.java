@@ -5,6 +5,7 @@
  */
 package spacegame2.gamedata.gamestate;
 
+import spacegame2.gamedata.gamestate.time.StarDate;
 import spacegame2.gamedata.playerinfo.Player;
 
 import java.io.*;
@@ -29,10 +30,8 @@ public class GameState implements Serializable {
 
     /**
      * Creates a gameState for a new player
-     * @param playerInfo 
      */
-    public GameState(Player playerInfo) {
-        this.player = playerInfo;
+    public GameState() {
         time = new StarDate();
     }
 
@@ -62,5 +61,9 @@ public class GameState implements Serializable {
 
     public StarDate getStarDate() {
         return time;
+    }
+
+    public void setPlayer(Player newPlayerInfo) {
+        player = newPlayerInfo;
     }
 }

@@ -1,6 +1,8 @@
 package spacegame2.gamedata.drawableobject;
 
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ReadOnlyDoubleProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import spacegame2.userinterface.systemscreen.StellarObjectSprite;
 
 public class StellarObject {
@@ -16,6 +18,7 @@ public class StellarObject {
 
         this.sprite = sprite;
         this.position = trajectory;
+        sprite.setOwner(this);
 
         this.canCollide = new SimpleBooleanProperty(canCollide);
     }
@@ -26,5 +29,9 @@ public class StellarObject {
 
     public ReadOnlyDoubleProperty posYProperty() {
         return position.posYProperty();
+    }
+
+    public StellarObjectSprite getSprite() {
+        return sprite;
     }
 }

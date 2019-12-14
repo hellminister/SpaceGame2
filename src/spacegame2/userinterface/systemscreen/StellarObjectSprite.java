@@ -1,6 +1,5 @@
 package spacegame2.userinterface.systemscreen;
 
-import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,14 +11,17 @@ public class StellarObjectSprite extends Parent {
     private Node sprite;
     private GraphicsContext gc;
 
-
-
-
-    public ReadOnlyDoubleProperty posXProperty() {
-        return owner.posXProperty();
+    public StellarObjectSprite(Node sprite) {
+        this.sprite = sprite;
+        super.getChildren().add(sprite);
     }
 
-    public ReadOnlyDoubleProperty posYProperty() {
-        return owner.posYProperty();
+
+
+    public void setOwner(StellarObject stellarObject) {
+        owner = stellarObject;
+        sprite.translateYProperty().bind(owner.posYProperty());
+        sprite.translateXProperty().bind(owner.posXProperty());
+
     }
 }

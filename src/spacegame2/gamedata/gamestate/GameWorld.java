@@ -6,6 +6,8 @@
 package spacegame2.gamedata.gamestate;
 
 
+import spacegame2.gamedata.gamestate.time.StarDate;
+
 import java.util.logging.Logger;
 
 /**
@@ -45,7 +47,7 @@ public final class GameWorld {
 
 
     public StarDate getCurrentStarDate(){
-        return getState().getStarDate();
+        return currentState.getStarDate();
     }
 
 }

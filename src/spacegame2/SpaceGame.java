@@ -68,7 +68,9 @@ public class SpaceGame extends Application {
     }
 
     public boolean changeSceneToSystemScreen() {
+        systemScreen.placePlayerShip();
         stage.setScene(systemScreen);
+        systemScreen.start();
         return true;
     }
 }

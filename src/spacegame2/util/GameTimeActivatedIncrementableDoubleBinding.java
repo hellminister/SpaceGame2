@@ -5,23 +5,29 @@ import spacegame2.gamedata.gamestate.GameWorld;
 
 /**
  * Created by user on 2016-12-23.
+ * will remove this class, it complicates thing unnecessarily
  */
-public class GameTimeActivatedIncrementableDoubleBinding extends DoubleBinding {
+public class GameTimeActivatedIncrementableDoubleBinding extends DoubleBinding implements SettableValueDoubleBinding {
     protected double oldValue;
-    protected ComputeFunction value;
+    protected ComputeFunction function;
 
     public GameTimeActivatedIncrementableDoubleBinding(double initialValue, ComputeFunction incrementFunction) {
-        super.bind(GameWorld.accessGameWorld().getCurrentStarDate().fractionalDateProperty());
+        super.bind(GameWorld.accessGameWorld().getCurrentStarDate().timeProperty());
         oldValue = initialValue;
-        value = incrementFunction;
+        function = incrementFunction;
     }
 
     @Override
     protected double computeValue() {
-        oldValue += value.getValue();
+        oldValue += function.getValue();
         return oldValue;
     }
 
+    public double previousValue(){
+        return oldValue;
+    }
+
+    @Override
     public void set(double v){
         oldValue = v;
     }

@@ -4,6 +4,8 @@ import javafx.scene.input.KeyEvent;
 import spacegame2.gamedata.drawableobject.ship.Ship;
 import spacegame2.gamedata.drawableobject.ship.ShipControl;
 
+import static spacegame2.gamedata.drawableobject.ship.TurnDirection.*;
+
 public final class ManualControl implements ShipControl {
     public static final ManualControl manualControl = new ManualControl();
 
@@ -22,18 +24,16 @@ public final class ManualControl implements ShipControl {
     }
 
     public void gotKeyPressedAction(KeyEvent e){
+        System.out.println("key pressed " + e);
         switch (e.getCode()) {
             case RIGHT:
-                controlling.trajectory().turnRight();
+                controlling.trajectory().turn(RIGHT);
                 break;
             case LEFT:
-                controlling.trajectory().turnLeft();
+                controlling.trajectory().turn(LEFT);
                 break;
             case UP:
                 controlling.trajectory().accelerate(true);
-                break;
-            case DOWN:
-              //  controlling.trajectory().accelerate();
                 break;
             default:
                 break;
@@ -41,10 +41,14 @@ public final class ManualControl implements ShipControl {
     }
 
     public void gotKeyReleasedAction(KeyEvent e){
+        System.out.println("key released " + e);
         switch (e.getCode()) {
             case UP:
                 controlling.trajectory().accelerate(false);
                 break;
+            case RIGHT:
+            case LEFT:
+                controlling.trajectory().turn(STOP);
             default:
                 break;
         }
