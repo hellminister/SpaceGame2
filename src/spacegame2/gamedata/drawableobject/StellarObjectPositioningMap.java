@@ -29,6 +29,8 @@ public class StellarObjectPositioningMap {
         Set<StellarObject> result = new HashSet<>();
 
 
+
+
         return result;
     }
 }

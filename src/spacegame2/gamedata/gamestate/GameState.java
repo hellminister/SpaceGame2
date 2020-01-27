@@ -5,7 +5,7 @@
  */
 package spacegame2.gamedata.gamestate;
 
-import spacegame2.gamedata.gamestate.time.StarDate;
+import spacegame2.gamedata.gamestate.time.StarDate_Old;
 import spacegame2.gamedata.playerinfo.Player;
 
 import java.io.*;
@@ -26,13 +26,13 @@ public class GameState implements Serializable {
      * @serial
      */
     private Player player;
-    private StarDate time;
+    private StarDate_Old time;
 
     /**
      * Creates a gameState for a new player
      */
     public GameState() {
-        time = new StarDate();
+        time = new StarDate_Old();
     }
 
     public String getInfo() {
@@ -46,7 +46,7 @@ public class GameState implements Serializable {
     }
 
     private void readObject(ObjectInputStream s) throws IOException, ClassNotFoundException {
-        time = (StarDate) s.readObject();
+        time = (StarDate_Old) s.readObject();
         player = (Player) s.readObject();
     }
 
@@ -59,7 +59,7 @@ public class GameState implements Serializable {
         return player.getSaveFileName();
     }
 
-    public StarDate getStarDate() {
+    public StarDate_Old getStarDate() {
         return time;
     }
 
